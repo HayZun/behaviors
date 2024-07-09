@@ -14,4 +14,4 @@ if (isset($_POST["update"])) {
    Html::back();
 }
 Html::redirect($CFG_GLPI["root_doc"]."/front/config.form.php?forcetab=".
-               urlencode('Xivoglpi$1'));
+               urlencode('PluginXivoglpiConfig$1'));
