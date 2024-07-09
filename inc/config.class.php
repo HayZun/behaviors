@@ -52,38 +52,12 @@ class PluginXivoglpiConfig extends CommonDBTM {
 
          $query = "CREATE TABLE `". $table."`(
                      `id` int $default_key_sign NOT NULL,
-                     `use_requester_item_group` tinyint NOT NULL default '0',
-                     `use_requester_user_group` tinyint NOT NULL default '0',
-                     `is_ticketsolutiontype_mandatory` tinyint NOT NULL default '0',
-                     `is_ticketsolution_mandatory` tinyint NOT NULL default '0',
-                     `is_ticketcategory_mandatory` tinyint NOT NULL default '0',
-                     `is_ticketcategory_mandatory_on_assign` tinyint NOT NULL default '0',
-                     `is_tickettaskcategory_mandatory` tinyint NOT NULL default '0',
-                     `is_tickettech_mandatory` tinyint NOT NULL default '0',
-                     `is_tickettechgroup_mandatory` tinyint NOT NULL default '0',
-                     `is_ticketrealtime_mandatory` tinyint NOT NULL default '0',
-                     `is_ticketlocation_mandatory` tinyint NOT NULL default '0',
-                     `is_requester_mandatory` tinyint NOT NULL default '0',
-                     `is_ticketdate_locked` tinyint NOT NULL default '0',
-                     `use_assign_user_group` tinyint NOT NULL default '0',
-                     `use_assign_user_group_update` tinyint NOT NULL default '0',
-                     `ticketsolved_updatetech` tinyint NOT NULL default '0',
-                     `tickets_id_format` VARCHAR(15) NULL,
-                     `changes_id_format` VARCHAR(15) NULL,
-                     `is_problemsolutiontype_mandatory` tinyint NOT NULL default '0',
-                     `remove_from_ocs` tinyint NOT NULL default '0',
-                     `add_notif` tinyint NOT NULL default '0',
-                     `use_lock` tinyint NOT NULL default '0',
-                     `single_tech_mode` int $default_key_sign NOT NULL default '0',
-                     `myasset` tinyint NOT NULL default '0',
-                     `groupasset` tinyint NOT NULL default '0',
-                     `clone` tinyint NOT NULL default '0',
-                     `addfup_updatetech` tinyint NOT NULL default '0',
-                     `is_tickettasktodo` tinyint NOT NULL default '0',
-                     `is_problemtasktodo` tinyint NOT NULL default '0',
-                     `is_changetasktodo` tinyint NOT NULL default '0',
-                     `date_mod` timestamp NULL DEFAULT NULL,
-                     `comment` text,
+                     `date_mod` datetime NOT NULL,
+                     `phones_inventory` tinyint(1) NOT NULL DEFAULT '0',
+                     `lines_inventory` tinyint(1) NOT NULL DEFAULT '0',
+                     `users_presence` tinyint(1) NOT NULL DEFAULT '0',
+                     `auto_open` tinyint(1) NOT NULL DEFAULT '0',
+                     `click2call` tinyint(1) NOT NULL DEFAULT '0',
                      PRIMARY KEY  (`id`)
                    ) ENGINE=InnoDB  DEFAULT CHARSET = {$default_charset}
                      COLLATE = {$default_collation} ROW_FORMAT=DYNAMIC";
@@ -107,26 +81,33 @@ class PluginXivoglpiConfig extends CommonDBTM {
 
    static function showConfigForm($item) {
 
-      $yesnoall = [0 => __('No'),
-                   1 => __('First'),
-                   2 => __('All')];
-
       $config = self::getInstance();
 
       $config->showFormHeader();
 
       echo "<tr class='tab_bg_1'>";
-      echo "<th colspan='2' class='center' width='60%'>".__('New ticket')."</th>";
-      echo "<th colspan='2' class='center'>".__('Inventory', 'xivoglpi')."</th>";
+      echo "<th colspan='4' class='center' style='text-align:center;'>".__('Configuration Plugin Xivo', 'xivoglpi')."</th>";
       echo "</tr>";
 
       echo "<tr class='tab_bg_1'>";
-      echo "<td>".__("Use the associated item's group", "xivoglpi")."</td><td>";
-      Dropdown::showYesNo("use_requester_item_group", $config->fields['use_requester_item_group']);
-      echo "<td>".__("Show my assets", "xivoglpi")."</td><td>";
-      Dropdown::showYesNo('myasset', $config->fields['myasset']);
+      echo "<td>".__('Phones inventory', 'xivoglpi')."</td><td>";
+      Dropdown::showYesNo('phones_inventory', $config->fields['phones_inventory']);
+      echo "</td><td>".__('Lines inventory', 'xivoglpi')."</td><td>";
+      Dropdown::showYesNo('lines_inventory', $config->fields['lines_inventory']);
+      echo "</td></tr>";
 
-      $config->showFormButtons(['formfooter' => true, 'candel'=>false]);
+      echo "<tr class='tab_bg_1'>";
+      echo "<td>".__('Users presence', 'xivoglpi')."</td><td>";
+      Dropdown::showYesNo('users_presence', $config->fields['users_presence']);
+      echo "</td><td>".__('Auto-open tickets or users form', 'xivoglpi')."</td><td>";
+      Dropdown::showYesNo('auto_open', $config->fields['auto_open']);
+      echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1'>";
+      echo "<td>".__('Click2Call (requires xivo client to handle callto: links)', 'xivoglpi')."</td><td>";
+      Dropdown::showYesNo('click2call', $config->fields['click2call']);
+      echo "</td><td></td><td></td>";
+      echo "</tr>";
 
       return false;
    }
